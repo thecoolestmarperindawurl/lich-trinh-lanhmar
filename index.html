@@ -207,65 +207,7 @@
 </footer>
 
 <script>
-const days = [
-  { key:"2026-08-24", dname:"Thứ 2", ddate:"24/08", today:false, events:[
-    ["05:30","07:00","Thức dậy + Di chuyển","done"],
-    ["07:00","16:00","WORKAHOLIC","done"],
-    ["16:00","18:00","Di chuyển + Nghỉ ngơi","done"],
-    ["18:00","19:30","VSCN + Chuẩn bị","done"],
-    ["19:30","22:30","COURSE | AI Agent","done",true],
-    ["22:30","23:00","Báo lịch","done"],
-  ]},
-  { key:"2026-08-25", dname:"Thứ 3", ddate:"25/08", today:false, events:[
-    ["05:30","07:00","Thức dậy + VSCN + Di chuyển","done"],
-    ["07:00","16:00","WORKAHOLIC","done"],
-    ["16:00","17:30","Về nhà + VSCN","done"],
-    ["17:30","19:30","Healing","done"],
-    ["19:30","22:00","SEONGON | PM","done"],
-    ["22:00","22:30","Báo lịch","done"],
-  ]},
-  { key:"2026-08-26", dname:"Thứ 4", ddate:"26/08", today:false, events:[
-    ["06:00","07:00","Thức dậy + VSCN (Ngủ quên)","notdone"],
-    ["07:00","09:00","STUDYSPACE (Ngủ quên)","notdone"],
-    ["09:00","11:00","Ăn sáng + VSCN + Di chuyển (kế hoạch gốc: Thức dậy + VSCN + Di chuyển)","notdone"],
-    ["11:00","20:00","WORKAHOLIC","done"],
-    ["20:00","22:30","COURSE | MARKETING FULLSTACK (‼️Save Chat)","done"],
-    ["22:30","23:00","Báo lịch","done"],
-  ]},
-  { key:"2026-08-27", dname:"Thứ 5", ddate:"27/08", today:false, events:[
-    ["05:30","07:00","Thức dậy + VSCN + Di chuyển","done"],
-    ["07:00","16:00","WORKAHOLIC","done"],
-    ["16:00","18:30","Về nhà + VSCN + Dọn dẹp","done"],
-    ["18:30","19:30","Check ib","done"],
-    ["19:30","22:30","COURSE | AI Agent","done",true],
-    ["22:30","23:00","Báo lịch","done"],
-  ]},
-  { key:"2026-08-28", dname:"Thứ 6", ddate:"28/08", today:false, events:[
-    ["05:30","07:00","Thức dậy + VSCN + Di chuyển","done"],
-    ["07:00","16:00","WORKAHOLIC","done"],
-    ["16:00","18:00","Về nhà + VSCN + Dọn dẹp","done"],
-    ["18:00","19:30","Check ib","done"],
-    ["19:30","22:00","SEONGON | PM","done"],
-    ["22:00","22:30","Báo lịch","done"],
-  ]},
-  { key:"2026-08-29", dname:"Thứ 7", ddate:"29/08", today:false, events:[
-    ["06:30","07:30","Thức dậy + VSCN (Ngủ quên)","notdone"],
-    ["07:30","09:30","STUDYSPACE (kế hoạch gốc: Thức dậy + VSCN)","notdone"],
-    ["09:30","11:00","Di chuyển","done"],
-    ["11:00","20:00","WORKAHOLIC","done"],
-    ["20:00","22:30","COURSE | MARKETING FULLSTACK (Dời lịch)","notdone"],
-    ["22:30","23:00","Báo lịch (Dọn dẹp)","notdone"],
-  ]},
-  { key:"2026-08-30", dname:"Chủ nhật", ddate:"30/08", today:true, events:[
-    ["08:00","09:00","Thức dậy + VSCN","pending"],
-    ["09:00","12:00","STUDYSPACE","pending"],
-    ["12:00","13:30","Ăn trưa + Nghỉ ngơi","pending"],
-    ["13:30","17:30","WORKSPACE","pending"],
-    ["17:30","19:00","VSCN + Ăn tối","pending"],
-    ["19:00","22:30","STUDYSPACE","pending"],
-    ["22:30","23:00","Báo lịch","pending"],
-  ]},
-];
+const days = [{"key": "2026-08-24", "dname": "Thứ 2", "ddate": "24/08", "today": false, "events": [["05:30", "07:00", "Thức dậy + Di chuyển", "done"], ["07:00", "16:00", "WORKAHOLIC", "done"], ["16:00", "18:00", "Di chuyển + Nghỉ ngơi", "done"], ["18:00", "19:30", "VSCN + Chuẩn bị", "done"], ["19:30", "22:30", "COURSE | AI Agent", "done", true], ["22:30", "23:00", "Báo lịch", "done"]]}, {"key": "2026-08-25", "dname": "Thứ 3", "ddate": "25/08", "today": false, "events": [["05:30", "07:00", "Thức dậy + VSCN + Di chuyển", "done"], ["07:00", "16:00", "WORKAHOLIC", "done"], ["16:00", "17:30", "Về nhà + VSCN", "done"], ["17:30", "19:30", "Healing", "done"], ["19:30", "22:00", "SEONGON | PM", "done"], ["22:00", "22:30", "Báo lịch", "done"]]}, {"key": "2026-08-26", "dname": "Thứ 4", "ddate": "26/08", "today": false, "events": [["06:00", "07:00", "Thức dậy + VSCN (Ngủ)", "notdone"], ["07:00", "09:00", "STUDYSPACE (Ngủ)", "notdone"], ["09:00", "11:00", "Ăn sáng + VSCN + Di chuyển (Thức dậy + VSCN + Di chuyển)", "notdone"], ["11:00", "20:00", "WORKAHOLIC", "done"], ["20:00", "22:30", "COURSE | MARKETING FULLSTACK (‼️Save Chat)", "done"], ["22:30", "23:00", "Báo lịch", "done"]]}, {"key": "2026-08-27", "dname": "Thứ 5", "ddate": "27/08", "today": false, "events": [["05:30", "07:00", "Thức dậy + VSCN + Di chuyển", "done"], ["07:00", "16:00", "WORKAHOLIC", "done"], ["16:00", "18:00", "Về nhà + VSCN + Dọn dẹp", "done"], ["18:00", "19:30", "Check ib", "done"], ["19:30", "22:30", "COURSE | AI Agent", "done", true], ["22:30", "23:00", "Báo lịch", "done"]]}, {"key": "2026-08-28", "dname": "Thứ 6", "ddate": "28/08", "today": false, "events": [["05:30", "07:00", "Thức dậy + VSCN + DI chuyển", "done"], ["07:00", "16:00", "WORKAHOLIC", "done"], ["16:00", "18:00", "Về nhà + VSCN + Dọn dẹp", "done"], ["18:00", "19:30", "Check ib", "done"], ["19:30", "22:00", "SEONGON | PM", "done"], ["22:00", "22:30", "Báo lịch", "done"]]}, {"key": "2026-08-29", "dname": "Thứ 7", "ddate": "29/08", "today": false, "events": [["06:30", "07:30", "Thức dậy + VSCN (Ngủ)", "notdone"], ["07:30", "09:30", "STUDYSPACE (Thức dậy + VSCN)", "notdone"], ["09:30", "11:00", "Di chuyển", "done"], ["11:00", "20:00", "WORKAHOLIC", "done"], ["20:00", "22:30", "COURSE | MARKETING FULLSTACK (Dời lịch)", "notdone"], ["22:30", "23:00", "Báo lịch (Dọn dẹp)", "notdone"]]}, {"key": "2026-08-30", "dname": "Chủ nhật", "ddate": "30/08", "today": true, "events": [["08:00", "09:00", "Thức dậy + VSCN (Ngủ)", "notdone"], ["09:00", "12:00", "STUDYSPACE (Thức dậy + VSCN)", "notdone"], ["12:00", "13:30", "Ăn trưa + Nghỉ ngơi", "done"], ["13:30", "17:30", "WORKSPACE", "done"], ["17:30", "19:00", "VSCN + Ăn tối", "done"], ["19:00", "22:30", "STUDYSPACE", "done"], ["22:30", "23:00", "Báo lịch", "done"]]}];
 
 const statusIcon = { done:"✅", notdone:"❌", pending:"⏳" };
 
