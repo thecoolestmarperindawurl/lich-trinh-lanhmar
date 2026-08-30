@@ -1,1 +1,371 @@
-REPLACE_MARKER
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lịch Trình LANHMAR</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;1,700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --purple-deep:#2D2FEF; --purple-mid:#6A5CFF; --purple-soft:#8F84FF;
+    --lav-100:#F3F1FD; --lav-200:#E7E2FB; --lav-300:#D6CEF7; --lav-400:#B2A4EF;
+    --orange:#FF7A45; --orange-dark:#E85D2A; --orange-soft:#FFD8C2;
+    --orange-text:#A6380D; --orange-deep:#C24418;
+    --ink:#241F45; --ink-soft:#55507A; --paper:#FFFDF9; --white:#FFFFFF;
+    --font: 'Montserrat', system-ui, sans-serif;
+    --radius:22px; --shadow-soft:0 10px 30px rgba(45,47,239,.12);
+    --bg:var(--lav-100); --surface:#ffffff; --border:var(--lav-300); --text:var(--ink); --text-2:var(--ink-soft);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0; font-family:var(--font); color:var(--text);
+    background:
+      radial-gradient(circle at 15% 8%, rgba(255,122,69,.10), transparent 40%),
+      radial-gradient(circle at 90% 15%, rgba(106,92,255,.14), transparent 45%),
+      var(--bg);
+    min-height:100vh; padding-bottom:40px;
+  }
+  body::before{
+    content:""; position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.5;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.16  0 0 0 0 0.12  0 0 0 0 0.35  0 0 0 0.025 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .marquee{overflow:hidden; white-space:nowrap; background:var(--purple-mid); color:#fff; padding:9px 0; position:relative; z-index:2;}
+  .marquee__track{display:inline-flex; gap:40px; animation:marquee 22s linear infinite;}
+  .marquee__track span{font-weight:700; letter-spacing:.06em; font-size:13px; display:inline-flex; align-items:center; gap:10px;}
+  .marquee__track span.accent{animation:accent-shimmer 2.4s ease-in-out infinite;}
+  @keyframes marquee{from{transform:translateX(0);} to{transform:translateX(-50%);}}
+  @keyframes accent-shimmer{0%,100%{color:#fff; text-shadow:0 0 6px rgba(255,255,255,.45);} 50%{color:var(--orange-soft); text-shadow:0 0 12px rgba(255,122,69,.85);}}
+  @media (prefers-reduced-motion: reduce){ .hero-badge{animation:none;} }
+
+  header.site{position:sticky; top:0; z-index:30; background:rgba(243,241,253,.88); backdrop-filter:blur(8px); border-bottom:2px solid var(--lav-300);}
+  .nav{display:flex; align-items:center; justify-content:space-between; padding:14px 24px; max-width:1160px; margin:0 auto; gap:16px; flex-wrap:wrap;}
+  .brand{display:flex; align-items:center; gap:10px;}
+  .brand .mark{
+    width:38px; height:38px; border-radius:50%; background:var(--purple-deep); color:#fff;
+    display:flex; align-items:center; justify-content:center; font-weight:800; font-size:16px; flex-shrink:0;
+    box-shadow:var(--shadow-soft);
+  }
+  .brand-text{display:flex; flex-direction:column; line-height:1.2;}
+  .brand-text b{font-size:15px; color:var(--purple-deep);}
+  .brand-text small{font-size:10.5px; color:var(--ink-soft); letter-spacing:.12em; text-transform:uppercase;}
+
+  .wrap{max-width:1160px; margin:0 auto; padding:0 24px; position:relative; z-index:1;}
+
+  .hero{padding:28px 0 6px;}
+  .hero-badge{
+    display:inline-flex; align-items:center; gap:8px; background:var(--orange-soft); color:var(--orange-text);
+    font-weight:700; font-size:12.5px; padding:6px 14px; border-radius:999px; margin-bottom:14px;
+    animation:badge-pulse 3.2s ease-in-out infinite;
+  }
+  @keyframes badge-pulse{0%,100%{box-shadow:0 0 0 0 rgba(255,122,69,.38);} 50%{box-shadow:0 0 0 7px rgba(255,122,69,0);}}
+  h1{font-family:var(--font); font-weight:800; font-size:clamp(24px,4vw,34px); color:var(--purple-deep); margin:0 0 6px;}
+  .hero p.lead{margin:0 0 20px; color:var(--ink-soft); font-size:14.5px; max-width:70ch; line-height:1.6;}
+
+  .stats{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin:0 0 28px;}
+  .stat-card{
+    background:#fff; border-radius:var(--radius); padding:18px 20px; box-shadow:var(--shadow-soft);
+    border:2px solid var(--lav-300);
+  }
+  .stat-card .num{font-size:1.7rem; font-weight:800; line-height:1.1; font-family:var(--font);}
+  .stat-card .label{color:var(--ink-soft); font-size:.78rem; margin-top:5px; font-weight:600;}
+  .stat-card.total .num{color:var(--purple-deep);}
+  .stat-card.done .num{color:var(--purple-deep);}
+  .stat-card.notdone .num{color:var(--orange-deep);}
+  .stat-card.rate .num{color:var(--orange-text);}
+
+  .tabs{display:flex; gap:8px; margin-bottom:22px; flex-wrap:wrap;}
+  .tab-btn{
+    appearance:none; cursor:pointer; font-family:var(--font); font-weight:700; font-size:14px;
+    padding:10px 20px; border-radius:999px; border:2px solid var(--purple-deep); color:var(--purple-deep);
+    background:#fff; transition:background .2s ease, color .2s ease, transform .15s ease;
+  }
+  .tab-btn:hover{background:var(--lav-200); transform:translateY(-2px);}
+  .tab-btn.active{background:var(--purple-deep); color:#fff;}
+
+  .view{display:none;}
+  .view.active{display:block;}
+
+  .week-grid{display:grid; grid-template-columns:repeat(7,minmax(155px,1fr)); gap:12px; overflow-x:auto; padding-bottom:10px;}
+  .day-col{
+    background:#fff; border:2px solid var(--lav-300); border-radius:18px; padding:13px;
+    display:flex; flex-direction:column; gap:8px; min-width:155px; box-shadow:var(--shadow-soft);
+  }
+  .day-col.today{border-color:var(--orange);}
+  .day-head{display:flex; flex-direction:column; gap:2px; padding-bottom:9px; border-bottom:1px solid var(--lav-300); margin-bottom:2px;}
+  .day-head .dname{font-weight:800; font-size:.88rem; color:var(--purple-deep);}
+  .day-head .ddate{font-size:.73rem; color:var(--ink-soft);}
+  .day-badge{align-self:flex-start; font-size:.66rem; font-weight:700; padding:3px 10px; border-radius:999px; margin-top:5px;}
+  .day-badge.done{background:var(--lav-100); color:var(--purple-deep); border:1.5px solid var(--lav-300);}
+  .day-badge.mixed{background:var(--orange-soft); color:var(--orange-text); border:1.5px solid var(--orange-dark);}
+  .day-badge.pend{background:#fff; color:var(--ink-soft); border:1.5px solid var(--lav-300);}
+
+  .ev{border-radius:12px; padding:8px 10px; font-size:.77rem; line-height:1.35; border:1.5px solid var(--lav-300); background:var(--lav-100);}
+  .ev .time{font-weight:700; font-size:.68rem; color:var(--ink-soft); display:block; margin-bottom:2px;}
+  .ev .title{color:var(--ink); font-weight:500;}
+  .ev.done{background:#fff; border-color:var(--lav-300);}
+  .ev.done .time{color:var(--purple-deep);}
+  .ev.notdone{background:var(--orange-soft); border-color:var(--orange-dark);}
+  .ev.notdone .time{color:var(--orange-deep);}
+  .ev.notdone .title{text-decoration:line-through; text-decoration-color:var(--orange-deep); opacity:.85; color:var(--orange-text);}
+  .ev.pending{background:var(--lav-200); border-color:var(--lav-400); border-style:dashed;}
+  .ev.pending .time{color:var(--ink-soft);}
+  .ev.important{border-left:4px solid #D50000; box-shadow:0 0 0 1px rgba(213,0,0,.15);}
+  .ev .flag{display:inline-block; margin-left:6px; font-size:.66rem; font-weight:800; color:#D50000; background:#FFE3E0; border:1px solid #D50000; border-radius:999px; padding:1px 7px; vertical-align:middle;}
+
+  .alert-banner{
+    background:linear-gradient(120deg, rgba(213,0,0,.10), rgba(213,0,0,.03)); border:2px solid #D50000; border-radius:var(--radius);
+    padding:16px 20px; margin:0 0 24px; display:flex; flex-direction:column; gap:10px; box-shadow:var(--shadow-soft);
+  }
+  .alert-banner h2{margin:0; font-size:15px; color:#D50000; font-family:var(--font); font-weight:800; display:flex; align-items:center; gap:8px;}
+  .alert-item{display:flex; align-items:center; gap:10px; font-size:.85rem; background:#fff; border:1.5px solid #ffcdd2; border-radius:12px; padding:9px 13px;}
+  .alert-item .when{font-weight:700; color:#D50000; min-width:120px;}
+  .alert-item .what{color:var(--ink);}
+
+  .kanban{display:grid; grid-template-columns:repeat(3,1fr); gap:18px;}
+  .kcol{background:#fff; border:2px solid var(--lav-300); border-radius:var(--radius); padding:16px; box-shadow:var(--shadow-soft); min-height:120px;}
+  .kcol h3{margin:0 0 4px; font-size:1rem; font-family:var(--font); font-weight:800; display:flex; align-items:center; gap:6px;}
+  .kcol .count{font-size:.74rem; color:var(--ink-soft); margin-bottom:14px; display:block; font-weight:600;}
+  .kcard{background:var(--lav-100); border:1.5px solid var(--lav-300); border-radius:12px; padding:11px 13px; margin-bottom:10px; font-size:.82rem; transition:transform .15s ease, box-shadow .15s ease;}
+  .kcard:hover{transform:translateY(-2px); box-shadow:var(--shadow-soft);}
+  .kcard .meta{font-size:.68rem; color:var(--ink-soft); margin-bottom:4px; font-weight:700; text-transform:uppercase; letter-spacing:.04em;}
+  .kcard .title{color:var(--ink);}
+  .kcol.done{border-top:4px solid var(--purple-deep);}
+  .kcol.notdone{border-top:4px solid var(--orange-deep);}
+  .kcol.pending{border-top:4px solid var(--lav-400);}
+  .kcol.done h3{color:var(--purple-deep);}
+  .kcol.notdone h3{color:var(--orange-deep);}
+  .kcol.pending h3{color:var(--ink-soft);}
+  .kcard.notdone{background:var(--orange-soft); border-color:var(--orange-dark);}
+  .kcard.notdone .title{text-decoration:line-through; opacity:.85; color:var(--orange-text);}
+  .kcard.pending{background:#fff; border-style:dashed;}
+  .kcard.important{border-left:4px solid #D50000; box-shadow:0 0 0 1px rgba(213,0,0,.15);}
+  .kcard .flag{display:inline-block; margin-left:6px; font-size:.62rem; font-weight:800; color:#D50000; background:#FFE3E0; border:1px solid #D50000; border-radius:999px; padding:1px 6px; vertical-align:middle;}
+
+  footer.site{position:relative; z-index:1; background:var(--purple-deep); color:#fff; padding:20px 0; margin-top:34px; border-radius:var(--radius) var(--radius) 0 0;}
+  footer.site .wrap{display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; font-size:.76rem; opacity:.9;}
+
+  @media (max-width:900px){
+    .stats{grid-template-columns:repeat(2,1fr);}
+    .kanban{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<div class="marquee">
+  <div class="marquee__track">
+    <span>★ LỊCH TRÌNH TUẦN <span class="accent">✦</span> LANHMAR TRACKER <span class="accent">✦</span> CẬP NHẬT TỪ GOOGLE CALENDAR</span>
+    <span>★ LỊCH TRÌNH TUẦN <span class="accent">✦</span> LANHMAR TRACKER <span class="accent">✦</span> CẬP NHẬT TỪ GOOGLE CALENDAR</span>
+  </div>
+</div>
+
+<header class="site">
+  <div class="nav">
+    <div class="brand">
+      <div class="mark">LA</div>
+      <div class="brand-text"><b>LANHMAR</b><small>Weekly Tracker</small></div>
+    </div>
+    <div class="tabs" id="tabsNav">
+      <button class="tab-btn active" data-view="schedule">🗓️ Lịch trình tuần</button>
+      <button class="tab-btn" data-view="kanban">🗂️ Kanban Board</button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="hero">
+    <span class="hero-badge">✦ Tự động cập nhật mỗi ngày 6:00 sáng</span>
+    <h1>Lịch trình & Kanban tuần này</h1>
+    <p class="lead">Thứ 2 24/08 – Chủ nhật 30/08/2026 · Nguồn: Google Calendar (anhduong.talkandshare@gmail.com) · Trạng thái lấy từ dấu ✅ / ❌ trong tiêu đề sự kiện</p>
+  </div>
+
+  <div class="stats" id="stats"></div>
+
+  <div class="alert-banner" id="alertBanner" style="display:none">
+    <h2>🔔 Lịch quan trọng (Tomato) sắp tới — cần chuẩn bị</h2>
+    <div id="alertList"></div>
+  </div>
+
+  <div class="view active" id="view-schedule">
+    <div class="week-grid" id="weekGrid"></div>
+  </div>
+
+  <div class="view" id="view-kanban">
+    <div class="kanban" id="kanbanGrid"></div>
+  </div>
+</div>
+
+<footer class="site">
+  <div class="wrap">
+    <span>© 2026 LANHMAR — Weekly Tracker</span>
+    <span>Quy ước: ✅ Hoàn thành · ❌ Chưa hoàn thành · ⏳ Chưa đánh dấu · ⚑ Quan trọng (Tomato)</span>
+  </div>
+</footer>
+
+<script>
+const days = [
+  { key:"2026-08-24", dname:"Thứ 2", ddate:"24/08", today:false, events:[
+    ["05:30","07:00","Thức dậy + Di chuyển","done"],
+    ["07:00","16:00","WORKAHOLIC","done"],
+    ["16:00","18:00","Di chuyển + Nghỉ ngơi","done"],
+    ["18:00","19:30","VSCN + Chuẩn bị","done"],
+    ["19:30","22:30","COURSE | AI Agent","done",true],
+    ["22:30","23:00","Báo lịch","done"],
+  ]},
+  { key:"2026-08-25", dname:"Thứ 3", ddate:"25/08", today:false, events:[
+    ["05:30","07:00","Thức dậy + VSCN + Di chuyển","done"],
+    ["07:00","16:00","WORKAHOLIC","done"],
+    ["16:00","17:30","Về nhà + VSCN","done"],
+    ["17:30","19:30","Healing","done"],
+    ["19:30","22:00","SEONGON | PM","done"],
+    ["22:00","22:30","Báo lịch","done"],
+  ]},
+  { key:"2026-08-26", dname:"Thứ 4", ddate:"26/08", today:false, events:[
+    ["06:00","07:00","Thức dậy + VSCN (Ngủ quên)","notdone"],
+    ["07:00","09:00","STUDYSPACE (Ngủ quên)","notdone"],
+    ["09:00","11:00","Ăn sáng + VSCN + Di chuyển (kế hoạch gốc: Thức dậy + VSCN + Di chuyển)","notdone"],
+    ["11:00","20:00","WORKAHOLIC","done"],
+    ["20:00","22:30","COURSE | MARKETING FULLSTACK (‼️Save Chat)","done"],
+    ["22:30","23:00","Báo lịch","done"],
+  ]},
+  { key:"2026-08-27", dname:"Thứ 5", ddate:"27/08", today:false, events:[
+    ["05:30","07:00","Thức dậy + VSCN + Di chuyển","done"],
+    ["07:00","16:00","WORKAHOLIC","done"],
+    ["16:00","18:30","Về nhà + VSCN + Dọn dẹp","done"],
+    ["18:30","19:30","Check ib","done"],
+    ["19:30","22:30","COURSE | AI Agent","done",true],
+    ["22:30","23:00","Báo lịch","done"],
+  ]},
+  { key:"2026-08-28", dname:"Thứ 6", ddate:"28/08", today:false, events:[
+    ["05:30","07:00","Thức dậy + VSCN + Di chuyển","done"],
+    ["07:00","16:00","WORKAHOLIC","done"],
+    ["16:00","18:00","Về nhà + VSCN + Dọn dẹp","done"],
+    ["18:00","19:30","Check ib","done"],
+    ["19:30","22:00","SEONGON | PM","done"],
+    ["22:00","22:30","Báo lịch","done"],
+  ]},
+  { key:"2026-08-29", dname:"Thứ 7", ddate:"29/08", today:false, events:[
+    ["06:30","07:30","Thức dậy + VSCN (Ngủ quên)","notdone"],
+    ["07:30","09:30","STUDYSPACE (kế hoạch gốc: Thức dậy + VSCN)","notdone"],
+    ["09:30","11:00","Di chuyển","done"],
+    ["11:00","20:00","WORKAHOLIC","done"],
+    ["20:00","22:30","COURSE | MARKETING FULLSTACK (Dời lịch)","notdone"],
+    ["22:30","23:00","Báo lịch (Dọn dẹp)","notdone"],
+  ]},
+  { key:"2026-08-30", dname:"Chủ nhật", ddate:"30/08", today:true, events:[
+    ["08:00","09:00","Thức dậy + VSCN","pending"],
+    ["09:00","12:00","STUDYSPACE","pending"],
+    ["12:00","13:30","Ăn trưa + Nghỉ ngơi","pending"],
+    ["13:30","17:30","WORKSPACE","pending"],
+    ["17:30","19:00","VSCN + Ăn tối","pending"],
+    ["19:00","22:30","STUDYSPACE","pending"],
+    ["22:30","23:00","Báo lịch","pending"],
+  ]},
+];
+
+const statusIcon = { done:"✅", notdone:"❌", pending:"⏳" };
+
+let total=0, done=0, notdone=0, pending=0;
+days.forEach(d=>d.events.forEach(e=>{
+  total++;
+  if(e[3]==="done") done++;
+  else if(e[3]==="notdone") notdone++;
+  else pending++;
+}));
+const marked = done+notdone;
+const rate = marked ? Math.round((done/marked)*100) : 0;
+
+document.getElementById("stats").innerHTML = `
+  <div class="stat-card total"><div class="num">${total}</div><div class="label">Tổng sự kiện tuần</div></div>
+  <div class="stat-card done"><div class="num">${done}</div><div class="label">✅ Hoàn thành</div></div>
+  <div class="stat-card notdone"><div class="num">${notdone}</div><div class="label">❌ Chưa hoàn thành</div></div>
+  <div class="stat-card rate"><div class="num">${rate}%</div><div class="label">Tỷ lệ hoàn thành (trên ${marked} mục đã chấm)</div></div>
+`;
+
+const weekGrid = document.getElementById("weekGrid");
+weekGrid.innerHTML = days.map(d=>{
+  const dDone = d.events.filter(e=>e[3]==="done").length;
+  const dNot = d.events.filter(e=>e[3]==="notdone").length;
+  const dPend = d.events.filter(e=>e[3]==="pending").length;
+  let badge;
+  if(dPend>0) badge = `<span class="day-badge pend">${dPend} chưa đánh dấu</span>`;
+  else if(dNot>0) badge = `<span class="day-badge mixed">${dDone}/${dDone+dNot} hoàn thành</span>`;
+  else badge = `<span class="day-badge done">${dDone}/${dDone} hoàn thành</span>`;
+
+  const evsHtml = d.events.map(e=>`
+    <div class="ev ${e[3]}${e[4]?' important':''}">
+      <span class="time">${e[0]}–${e[1]} ${statusIcon[e[3]]}</span>
+      <span class="title">${e[2]}</span>${e[4]?'<span class="flag">⚑ Quan trọng</span>':''}
+    </div>
+  `).join("");
+
+  return `
+    <div class="day-col ${d.today?'today':''}">
+      <div class="day-head">
+        <span class="dname">${d.dname}${d.today?' · hôm nay':''}</span>
+        <span class="ddate">${d.ddate}/2026</span>
+        ${badge}
+      </div>
+      ${evsHtml}
+    </div>
+  `;
+}).join("");
+
+function kanbanCards(status){
+  const cards=[];
+  days.forEach(d=>d.events.forEach(e=>{
+    if(e[3]===status) cards.push({day:d.dname, date:d.ddate, time:`${e[0]}–${e[1]}`, title:e[2], important:!!e[4]});
+  }));
+  return cards;
+}
+function renderCol(title, status, icon){
+  const cards = kanbanCards(status);
+  return `
+    <div class="kcol ${status}">
+      <h3>${icon} ${title}</h3>
+      <span class="count">${cards.length} mục</span>
+      ${cards.map(c=>`
+        <div class="kcard ${status}${c.important?' important':''}">
+          <div class="meta">${c.day} ${c.date} · ${c.time}</div>
+          <div class="title">${c.title}${c.important?'<span class="flag">⚑ Quan trọng</span>':''}</div>
+        </div>
+      `).join("") || '<div class="kcard" style="opacity:.6">Không có mục nào</div>'}
+    </div>
+  `;
+}
+document.getElementById("kanbanGrid").innerHTML =
+  renderCol("Hoàn thành","done","✅") +
+  renderCol("Chưa hoàn thành","notdone","❌") +
+  renderCol("Chưa đánh dấu","pending","⏳");
+
+const upcomingImportant = [];
+days.forEach(d=>d.events.forEach(e=>{
+  if(e[4] && e[3] !== "done"){
+    upcomingImportant.push({day:d.dname, date:d.ddate, time:`${e[0]}–${e[1]}`, title:e[2]});
+  }
+}));
+if(upcomingImportant.length){
+  document.getElementById("alertBanner").style.display = "flex";
+  document.getElementById("alertList").innerHTML = upcomingImportant.map(c=>`
+    <div class="alert-item">
+      <span class="when">${c.day} ${c.date} · ${c.time}</span>
+      <span class="what">${c.title} — nhớ chuẩn bị trước!</span>
+    </div>
+  `).join("");
+}
+
+document.querySelectorAll(".tab-btn").forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));
+    document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
+    btn.classList.add("active");
+    document.getElementById("view-"+btn.dataset.view).classList.add("active");
+  });
+});
+</script>
+</body>
+</html>
