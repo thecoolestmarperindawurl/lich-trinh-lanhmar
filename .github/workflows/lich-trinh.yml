@@ -1,0 +1,71 @@
+name: LANHMAR Lich Trinh Automation
+
+on:
+  schedule:
+    # Gio duoc ghi theo UTC. Asia/Ho_Chi_Minh = UTC+7.
+    - cron: "0 23 * * *"   # 06:00 gio VN moi ngay -> cap nhat lich tuan
+    - cron: "0 0 * * *"    # 07:00 gio VN moi ngay -> nhac lich quan trong HOM NAY
+    - cron: "0 13 * * *"   # 20:00 gio VN moi ngay -> nhac lich quan trong NGAY MAI
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "Chay thu: update / morning / evening"
+        required: false
+        default: "update"
+
+permissions:
+  contents: write
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Xac dinh job theo cron da kich hoat
+        id: which
+        run: |
+          case "${{ github.event.schedule }}" in
+            "0 23 * * *") echo "mode=update" >> "$GITHUB_OUTPUT" ;;
+            "0 0 * * *")  echo "mode=morning" >> "$GITHUB_OUTPUT" ;;
+            "0 13 * * *") echo "mode=evening" >> "$GITHUB_OUTPUT" ;;
+            *) echo "mode=${{ github.event.inputs.mode || 'update' }}" >> "$GITHUB_OUTPUT" ;;
+          esac
+
+      - name: Cap nhat lich trinh tuan (06:00)
+        if: steps.which.outputs.mode == 'update'
+        env:
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python scripts/update_schedule.py
+
+      - name: Nhac lich quan trong (07:00 / 20:00)
+        if: steps.which.outputs.mode == 'morning' || steps.which.outputs.mode == 'evening'
+        env:
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python scripts/remind_important.py ${{ steps.which.outputs.mode }}
+
+      - name: Commit index.html neu co thay doi
+        if: steps.which.outputs.mode == 'update'
+        run: |
+          git config user.name "lanhmar-bot"
+          git config user.email "actions@github.com"
+          git add index.html
+          git diff --cached --quiet || git commit -m "Auto cap nhat lich trinh $(TZ=Asia/Ho_Chi_Minh date +%d/%m)"
+          git push
