@@ -3,9 +3,11 @@ name: LANHMAR Lich Trinh Automation
 on:
   schedule:
     # Gio duoc ghi theo UTC. Asia/Ho_Chi_Minh = UTC+7.
-    - cron: "0 23 * * *"   # 06:00 gio VN moi ngay -> cap nhat lich tuan
-    - cron: "0 0 * * *"    # 07:00 gio VN moi ngay -> nhac lich quan trong HOM NAY
-    - cron: "0 13 * * *"   # 20:00 gio VN moi ngay -> nhac lich quan trong NGAY MAI
+    # Luu y: cron dung phut le (khong phai :00) theo khuyen nghi cua GitHub
+    # de giam do tre do nghen tai nguyen vao dau moi gio ("top of the hour").
+    - cron: "7 23 * * *"   # ~06:07 gio VN moi ngay -> cap nhat lich tuan
+    - cron: "12 0 * * *"   # ~07:12 gio VN moi ngay -> nhac lich quan trong HOM NAY
+    - cron: "18 13 * * *"  # ~20:18 gio VN moi ngay -> nhac lich quan trong NGAY MAI
   workflow_dispatch:
     inputs:
       mode:
@@ -35,13 +37,13 @@ jobs:
         id: which
         run: |
           case "${{ github.event.schedule }}" in
-            "0 23 * * *") echo "mode=update" >> "$GITHUB_OUTPUT" ;;
-            "0 0 * * *")  echo "mode=morning" >> "$GITHUB_OUTPUT" ;;
-            "0 13 * * *") echo "mode=evening" >> "$GITHUB_OUTPUT" ;;
+            "7 23 * * *")  echo "mode=update" >> "$GITHUB_OUTPUT" ;;
+            "12 0 * * *")  echo "mode=morning" >> "$GITHUB_OUTPUT" ;;
+            "18 13 * * *") echo "mode=evening" >> "$GITHUB_OUTPUT" ;;
             *) echo "mode=${{ github.event.inputs.mode || 'update' }}" >> "$GITHUB_OUTPUT" ;;
           esac
 
-      - name: Cap nhat lich trinh tuan (06:00)
+      - name: Cap nhat lich trinh tuan (~06:07)
         if: steps.which.outputs.mode == 'update'
         env:
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
@@ -51,7 +53,7 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: python scripts/update_schedule.py
 
-      - name: Nhac lich quan trong (07:00 / 20:00)
+      - name: Nhac lich quan trong (~07:12 / ~20:18)
         if: steps.which.outputs.mode == 'morning' || steps.which.outputs.mode == 'evening'
         env:
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
