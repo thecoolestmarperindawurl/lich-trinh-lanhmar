@@ -1,18 +1,16 @@
 name: LANHMAR Lich Trinh Automation
 
+# LUU Y: khong dung "schedule:" (cron noi bo cua GitHub Actions) nua vi
+# GitHub xep hang su kien schedule theo kieu best-effort, hay bi tre hang
+# gio hoac bi bo hoan toan khi tai cao. Lich chay chinh xac duoc dieu
+# khien tu ben ngoai (cron-job.org) goi thang API workflow_dispatch vao
+# dung gio - xem SETUP.md muc "Cron chinh xac voi cron-job.org".
 on:
-  schedule:
-    # Gio duoc ghi theo UTC. Asia/Ho_Chi_Minh = UTC+7.
-    # Luu y: cron dung phut le (khong phai :00) theo khuyen nghi cua GitHub
-    # de giam do tre do nghen tai nguyen vao dau moi gio ("top of the hour").
-    - cron: "7 23 * * *"   # ~06:07 gio VN moi ngay -> cap nhat lich tuan
-    - cron: "12 0 * * *"   # ~07:12 gio VN moi ngay -> nhac lich quan trong HOM NAY
-    - cron: "18 13 * * *"  # ~20:18 gio VN moi ngay -> nhac lich quan trong NGAY MAI
   workflow_dispatch:
     inputs:
       mode:
-        description: "Chay thu: update / morning / evening"
-        required: false
+        description: "update / morning / evening"
+        required: true
         default: "update"
 
 permissions:
@@ -33,18 +31,8 @@ jobs:
       - name: Install dependencies
         run: pip install requests
 
-      - name: Xac dinh job theo cron da kich hoat
-        id: which
-        run: |
-          case "${{ github.event.schedule }}" in
-            "7 23 * * *")  echo "mode=update" >> "$GITHUB_OUTPUT" ;;
-            "12 0 * * *")  echo "mode=morning" >> "$GITHUB_OUTPUT" ;;
-            "18 13 * * *") echo "mode=evening" >> "$GITHUB_OUTPUT" ;;
-            *) echo "mode=${{ github.event.inputs.mode || 'update' }}" >> "$GITHUB_OUTPUT" ;;
-          esac
-
-      - name: Cap nhat lich trinh tuan (~06:07)
-        if: steps.which.outputs.mode == 'update'
+      - name: Cap nhat lich trinh tuan
+        if: github.event.inputs.mode == 'update'
         env:
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
@@ -53,18 +41,18 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: python scripts/update_schedule.py
 
-      - name: Nhac lich quan trong (~07:12 / ~20:18)
-        if: steps.which.outputs.mode == 'morning' || steps.which.outputs.mode == 'evening'
+      - name: Nhac lich quan trong
+        if: github.event.inputs.mode == 'morning' || github.event.inputs.mode == 'evening'
         env:
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
           GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        run: python scripts/remind_important.py ${{ steps.which.outputs.mode }}
+        run: python scripts/remind_important.py ${{ github.event.inputs.mode }}
 
       - name: Commit index.html neu co thay doi
-        if: steps.which.outputs.mode == 'update'
+        if: github.event.inputs.mode == 'update'
         run: |
           git config user.name "lanhmar-bot"
           git config user.email "actions@github.com"
